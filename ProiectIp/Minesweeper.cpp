@@ -3,8 +3,8 @@
 #include <time.h>
 #include <Windows.h>
 using namespace std;
-int grid[50][50], clicked[50][50];
-void matrixGeneration(int grid[50][50], int height, int width, int bombs) {
+int grid[55][55], clicked[55][55], lines, columns, bombs;
+void matrixGeneration(int grid[55][55], int height, int width, int bombs) {
 	int bomsOnMap = 0;
 	grid[-1][-1] = 201;
 	grid[-1][width] = 187;
@@ -49,48 +49,23 @@ void matrixGeneration(int grid[50][50], int height, int width, int bombs) {
 			}
 }
 
-void afisare(int grid[50][50],int clicked[50][50], int height, int width)
+void afisare(int grid[55][55],int clicked[55][55], int height, int width)
 {	
 	for (int i = -1; i <= height; i++) {
 		for (int j = -1; j <= width; j++)
 			if (i == -1 || j == -1 || i == height || j == width) {
 				cout << char(grid[i][j]);
-				if (i == -1 && grid[i][j] != 187 && grid[i][j] != 201 && j != width - 1)
-					cout << char(209);
-				else
-					if (i == height && grid[i][j] != 200 && grid[i][j] != 188 && j != width - 1)
-						cout << char(207);
 			}
 			else
 				if(clicked[i][j]==2)
-					if (j == width - 1)
 						cout << "?";
-					else
-						cout << "?" << char(179);
 				else
-					if (clicked[i][j] == -1)
-						if (j == width - 1)
-							cout << char(178);
-						else
-							cout << char(178) << char(179);
+					if (clicked[i][j] == 0)
+						cout << "#";
 				else	
 					if (clicked[i][j] == 1)
-						if (j == width- 1)
 							cout << grid[i][j];
-						else
-							cout << grid[i][j] << char(179);
-					else
-						if (j == width - 1)
-							cout << char(178);
-						else
-							cout << char(178) << char(179);
 		cout << endl;
-		if (i != -1 && i != height - 1 && i != height) {
-			cout << char(199);
-			for (int k = 0; k < width-1; k++)
-				cout << char(196) << char(197);
-			cout <<char(196)<< char(182) << endl;
-		}
 	}
 }
 
@@ -202,7 +177,7 @@ int menuSelection(short x, short y) {
 	if (x >= 16 && x <= 25 && y == 9)
 		return 1;
 	else
-		if (x >= 16 && x >= 26 && y == 11)
+		if (x >= 16 && x <= 26 && y == 11)
 			return 2;
 		else
 			if (x >= 16 && x <= 19 && y == 13)
@@ -211,7 +186,24 @@ int menuSelection(short x, short y) {
 }
 
 void howtoplayMenu() {
-
+	cout << char(201);
+	for (int i = 0; i < 108; i++)
+		cout << char(205);
+	cout << char(187) << endl;
+	cout << char(186) << "      QUICK START:                                                                                          " << char(186) << endl;
+	cout << char(186) << " - You are presented with a board of squares.                                                               " << char(186) << endl;
+	cout << char(186) << " - Some squares contain mines (bombs), others don't.                                                        " << char(186) << endl;
+	cout << char(186) << " - If you click on a square containing a bomb, you lose.                                                    " << char(186) << endl;
+	cout << char(186) << " - If you manage to click all the squares (without clicking on bombs) you win.                              " << char(186) << endl;
+	cout << char(186) << " - Clicking a square which doesn't have a bomb reveals the number of neighbouring squares containing bombs. " << char(186) << endl;
+	cout << char(186) << " - Use this information plus some guess work to avoid the bombs.                                            " << char(186) << endl;
+	cout << char(186) << "      CONTROLS:                                                                                             " << char(186) << endl;
+	cout << char(186) << " - To open a square, point at the square and click on it.                                                   " << char(186) << endl;
+	cout << char(186) << " - To mark a square you think is a bomb, point and right-click.                                             " << char(186) << endl;
+	cout << char(200);
+	for (int i = 0; i < 108; i++)
+		cout << char(205);
+	cout << char(188) << endl;
 }
 
 int dificultySelection(short x, short y) {
@@ -241,7 +233,6 @@ int main() {
 		while (menuSelect == 0 || mouseType == 2) {
 			system("cls");
 			mainMenu();
-			cout << mouseX << " " << mouseY;
 			click(mouseX, mouseY, mouseType);
 			menuSelect = menuSelection(mouseX, mouseY);
 		}
@@ -255,39 +246,69 @@ int main() {
 			while (difSelect == 0 || mouseType == 2) {
 				system("cls");
 				playMenu();
-				cout << mouseX << " " << mouseY;
 				click(mouseX, mouseY, mouseType);
 				difSelect = dificultySelection(mouseX, mouseY);
 			}
 			switch (difSelect) {
 			case 1: {
 				system("cls");
-				
+				lines = 9;
+				columns = 9;
+				bombs = 10;
+				matrixGeneration(grid, lines, columns, bombs);
+				afisare(grid, clicked, lines, columns);
 			}
 				break;
 			case 2: {
 				system("cls");
+				lines = 16;
+				columns = 16;
+				bombs = 40;
 				
 			}
 				break;
 			case 3: {
 				system("cls");
-				
+				lines = 16;
+				columns = 30;
+				bombs = 99;
+
 			}
 				break;
 			case 4: {
 				system("cls");
-				
+				cout << "LINES(min 2; max 50):";
+				cin >> lines;
+				if (lines > 50)
+					lines = 50;
+				if (lines < 2)
+					lines = 2;
+				cout << "COLUMNS(min 2; max 50):";
+				cin >> columns;
+				if (columns > 50)
+					columns = 50;
+				if (columns < 2)
+					columns = 2;
+				cout << "BOMBS(min 1; max " << (lines*columns) - 1 << "):";
+				cin >> bombs;
+				if (bombs > lines*columns - 1)
+					bombs = lines*columns - 1;
+				if (bombs < 1)
+					bombs = 1;
+
 			}
 				break;
 			}
 		}
 			break;
-		case 2 :
+		case 2: {
+			system("cls");
 			howtoplayMenu();
+		}
 			break;
-		case 3 :
+		case 3: {
 			exitGame = true;
+		}
 			break;
 		}
 		exitGame = true;
