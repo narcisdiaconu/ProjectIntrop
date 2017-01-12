@@ -1,5 +1,5 @@
 ﻿  Minesweeper.cpp
 c:\users\narci\desktop\projectintrop\projectintrop\proiectip\minesweeper.cpp(114): warning C4101: 'coord': unreferenced local variable
-c:\users\narci\desktop\projectintrop\projectintrop\proiectip\minesweeper.cpp(150): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\narci\desktop\projectintrop\projectintrop\proiectip\minesweeper.cpp(198): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   ProiectIp.vcxproj -> C:\Users\narci\Desktop\projectintrop\projectintrop\Debug\ProiectIp.exe
   ProiectIp.vcxproj -> C:\Users\narci\Desktop\projectintrop\projectintrop\Debug\ProiectIp.pdb (Full PDB)

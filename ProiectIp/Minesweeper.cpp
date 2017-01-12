@@ -53,7 +53,7 @@ void afisare(int grid[50][50],int clicked[50][50], int height, int width)
 {	
 	for (int i = -1; i <= height; i++) {
 		for (int j = -1; j <= width; j++)
-			if (i == -1 || j == -1 || i == height || j == width) {		//marginea 
+			if (i == -1 || j == -1 || i == height || j == width) {
 				cout << char(grid[i][j]);
 				if (i == -1 && grid[i][j] != 187 && grid[i][j] != 201 && j != width - 1)
 					cout << char(209);
@@ -62,19 +62,19 @@ void afisare(int grid[50][50],int clicked[50][50], int height, int width)
 						cout << char(207);
 			}
 			else
-				if (grid[i][j] == -1)									//bombele
-					if (j == height - 1)
+				if (grid[i][j] == -1)	
+					if (j == width - 1)
 						cout << char(178);
 					else
 						cout << char(178) << char(179);
-				else													//restul
+				else	
 					if (clicked[i][j] == 1)
-						if (j == height - 1)
+						if (j == width- 1)
 							cout << grid[i][j];
 						else
 							cout << grid[i][j] << char(179);
 					else
-						if (j == height - 1)
+						if (j == width - 1)
 							cout << char(178);
 						else
 							cout << char(178) << char(179);
@@ -144,24 +144,78 @@ void click(short &x, short &y, int &type){
 	SetConsoleMode(hin, dwPreviousMode | ENABLE_EXTENDED_FLAGS);
 }
 
+void mainMenu() {
+	cout << char(201);
+	for (int i = 0; i < 41; i++)
+		cout << char(205);
+	cout << char(187) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "     *       * ***** *     *  *    *     " << char(186) << endl;
+	cout << char(186) << "     * *   * * *     * *   *  *    *     " << char(186) << endl;
+	cout << char(186) << "     *  * *  * ***   *  *  *  *    *     " << char(186) << endl;
+	cout << char(186) << "     *   *   * *     *   * *  *    *     " << char(186) << endl;
+	cout << char(186) << "     *       * ***** *     *  ******     " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "               START GAME                " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "               HOW TO PLAY               " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "               EXIT                      " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(200);
+	for (int i = 0; i < 41; i++)
+		cout << char(205);
+	cout << char(188) << endl;
+}
+
+void playMenu() {
+	cout << char(201);
+	for (int i = 0; i < 41; i++)
+		cout << char(205);
+	cout << char(187) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "            CHOOSE DIFICULTY:            " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "            EASY                         " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "            MEDIUM                       " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "            HARD                         " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(186) << "            CUSTOM                       " << char(186) << endl;
+	cout << char(186) << "                                         " << char(186) << endl;
+	cout << char(200);
+	for (int i = 0; i < 41; i++)
+		cout << char(205);
+	cout << char(188) << endl;
+}
+
 short m, n;
 int o;
 int main() {
 	srand(time(NULL));
+	/*
 	int x, y, b;
 	cin >> x >> y >> b;
 	system("cls");
 	matrixGeneration(grid, x, y, b);
 	afisare(grid, clicked, x, y);
 	for (int i = 0; i < 3; i++) {
-		click(m, n, o);
-		m--;
-		n--;
-		m = m / 2 + 1;
-		n = n / 2 + 1;
+		click(n, m, o);
+		m = m / 2;
+		n = n / 2;
 		modify(m, n, x, y);
 		system("cls");
 		afisare(grid, clicked, x, y);
+		cout << m << " " << n << " ";
 	}
+	*/
+	mainMenu();
+	int x;
+	cin >> x;
+	system("cls");
+	playMenu();
 	return 0;
 }
