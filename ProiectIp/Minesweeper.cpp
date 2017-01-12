@@ -62,11 +62,17 @@ void afisare(int grid[50][50],int clicked[50][50], int height, int width)
 						cout << char(207);
 			}
 			else
-				if (grid[i][j] == -1)	
+				if(clicked[i][j]==2)
 					if (j == width - 1)
-						cout << char(178);
+						cout << "?";
 					else
-						cout << char(178) << char(179);
+						cout << "?" << char(179);
+				else
+					if (clicked[i][j] == -1)
+						if (j == width - 1)
+							cout << char(178);
+						else
+							cout << char(178) << char(179);
 				else	
 					if (clicked[i][j] == 1)
 						if (j == width- 1)
@@ -192,30 +198,99 @@ void playMenu() {
 	cout << char(188) << endl;
 }
 
-short m, n;
-int o;
+int menuSelection(short x, short y) {
+	if (x >= 16 && x <= 25 && y == 9)
+		return 1;
+	else
+		if (x >= 16 && x >= 26 && y == 11)
+			return 2;
+		else
+			if (x >= 16 && x <= 19 && y == 13)
+				return 3;
+	return 0;
+}
+
+void howtoplayMenu() {
+
+}
+
+int dificultySelection(short x, short y) {
+	if (x >= 13 && x <= 16 && y == 4)
+		return 1;
+	else
+		if (x >= 13 && x <= 18 && y == 6)
+			return 2;
+		else
+			if (x >= 13 && x <= 16 && y == 8)
+				return 3;
+			else
+				if (x >= 13 && x <= 18 && y == 10)
+					return 4;
+	return 0;
+}
+
 int main() {
 	srand(time(NULL));
-	/*
-	int x, y, b;
-	cin >> x >> y >> b;
-	system("cls");
-	matrixGeneration(grid, x, y, b);
-	afisare(grid, clicked, x, y);
-	for (int i = 0; i < 3; i++) {
-		click(n, m, o);
-		m = m / 2;
-		n = n / 2;
-		modify(m, n, x, y);
-		system("cls");
-		afisare(grid, clicked, x, y);
-		cout << m << " " << n << " ";
+	bool exitGame = false;
+	short mouseX, mouseY;
+	int mouseType;
+	while (!exitGame) {
+		mainMenu();
+		click(mouseX, mouseY, mouseType);
+		int menuSelect = menuSelection(mouseX, mouseY);
+		while (menuSelect == 0 || mouseType == 2) {
+			system("cls");
+			mainMenu();
+			cout << mouseX << " " << mouseY;
+			click(mouseX, mouseY, mouseType);
+			menuSelect = menuSelection(mouseX, mouseY);
+		}
+		switch(menuSelect){
+		case 1:
+		{
+			system("cls");
+			playMenu();
+			click(mouseX, mouseY, mouseType);
+			int difSelect = dificultySelection(mouseX, mouseY);
+			while (difSelect == 0 || mouseType == 2) {
+				system("cls");
+				playMenu();
+				cout << mouseX << " " << mouseY;
+				click(mouseX, mouseY, mouseType);
+				difSelect = dificultySelection(mouseX, mouseY);
+			}
+			switch (difSelect) {
+			case 1: {
+				system("cls");
+				
+			}
+				break;
+			case 2: {
+				system("cls");
+				
+			}
+				break;
+			case 3: {
+				system("cls");
+				
+			}
+				break;
+			case 4: {
+				system("cls");
+				
+			}
+				break;
+			}
+		}
+			break;
+		case 2 :
+			howtoplayMenu();
+			break;
+		case 3 :
+			exitGame = true;
+			break;
+		}
+		exitGame = true;
 	}
-	*/
-	mainMenu();
-	int x;
-	cin >> x;
-	system("cls");
-	playMenu();
 	return 0;
 }
