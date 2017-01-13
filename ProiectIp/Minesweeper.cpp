@@ -57,16 +57,23 @@ void afisare(int grid[55][55],int clicked[55][55], int height, int width)
 				cout << char(grid[i][j]);
 			}
 			else
-				if(clicked[i][j]==2)
-						cout << "?";
+				if (clicked[i][j] == 2)
+					cout << "?";
 				else
 					if (clicked[i][j] == 0)
 						cout << "#";
-				else	
-					if (clicked[i][j] == 1)
-							cout << grid[i][j];
+					else
+						if (clicked[i][j] == 1)
+							if (grid[i][j] == -1)
+								cout << char(233);
+							else
+								if (grid[i][j] == 0)
+									cout << " ";
+								else
+									cout << grid[i][j];
 		cout << endl;
 	}
+	cout << " CLICK HERE TO RETURN TO MENU " << endl;
 }
 
 void modify(short x, short y, int height, int width) {
@@ -200,6 +207,7 @@ void howtoplayMenu() {
 	cout << char(186) << "      CONTROLS:                                                                                             " << char(186) << endl;
 	cout << char(186) << " - To open a square, point at the square and click on it.                                                   " << char(186) << endl;
 	cout << char(186) << " - To mark a square you think is a bomb, point and right-click.                                             " << char(186) << endl;
+	cout << char(186) << " CLICK HERE TO RETURN TO MENU                                                                               " << char(186) << endl;
 	cout << char(200);
 	for (int i = 0; i < 108; i++)
 		cout << char(205);
@@ -219,6 +227,49 @@ int dificultySelection(short x, short y) {
 				if (x >= 13 && x <= 18 && y == 10)
 					return 4;
 	return 0;
+}
+
+int verify(int height, int width) {
+	for (int i = 0; i < height; i++)
+		for (int j = 0; j < width; j++)
+			if (clicked[i][j] == 0 && grid[i][j] != -1)
+				return 0;
+	return 1;
+}
+
+int gameStart(int height, int width) {
+	short clickX, clickY;
+	int clickType;
+	while (!verify(height, width)) {
+		system("cls");
+		afisare(grid, clicked, height, width);
+		click(clickY, clickX, clickType);
+		clickX--;
+		clickY--;
+		if (clickType == 2)
+			if (clickX >= 0 && clickX < height&&clickY >= 0 && clickY < width)
+				if (clicked[clickX][clickY] == 2)
+					clicked[clickX][clickY] = 0;
+				else	
+					clicked[clickX][clickY] = 2;
+			else;
+		else
+			if (clickX >= -1 && clickX < height&&clickY >= -1 && clickY < width)
+				if (grid[clickX][clickY] == -1 && clicked[clickX][clickY] == 0)
+					return 0;
+				else
+					modify(clickX, clickY, height, width);
+			else
+				if (clickX > 0 && clickX < 28 && clickY == height + 2) 
+					return -1;
+	}
+	return 1;
+}
+
+void resetare(int a[55][55], int lines, int columns) {
+	for (int i = 0; i < lines; i++)
+		for (int j = 0; j < columns; j++)
+			a[i][j] = 0;
 }
 
 int main() {
@@ -255,26 +306,31 @@ int main() {
 				lines = 9;
 				columns = 9;
 				bombs = 10;
+				resetare(grid, lines, columns);
+				resetare(clicked, lines, columns);
 				matrixGeneration(grid, lines, columns, bombs);
-				afisare(grid, clicked, lines, columns);
 			}
-				break;
+					break;
 			case 2: {
 				system("cls");
 				lines = 16;
 				columns = 16;
 				bombs = 40;
-				
+				resetare(grid, lines, columns);
+				resetare(clicked, lines, columns);
+				matrixGeneration(grid, lines, columns, bombs);
 			}
-				break;
+					break;
 			case 3: {
 				system("cls");
 				lines = 16;
 				columns = 30;
 				bombs = 99;
-
+				resetare(grid, lines, columns);
+				resetare(clicked, lines, columns);
+				matrixGeneration(grid, lines, columns, bombs);
 			}
-				break;
+					break;
 			case 4: {
 				system("cls");
 				cout << "LINES(min 2; max 50):";
@@ -295,23 +351,53 @@ int main() {
 					bombs = lines*columns - 1;
 				if (bombs < 1)
 					bombs = 1;
-
+				resetare(grid,lines,columns);
+				resetare(clicked,lines,columns);
+				matrixGeneration(grid, lines, columns, bombs);
 			}
-				break;
+					break;
 			}
+			int gameResult = gameStart(lines, columns);
+			system("cls");
+			if (gameResult == 0) {
+				cout << " YOU LOST " << endl;
+				for (int i = 0; i < lines; i++)
+					for (int j = 0; j < columns; j++)
+						if (grid[i][j] == -1)
+							clicked[i][j] = 1;
+			}
+			else
+				if (gameResult == 1) {
+					cout << " YOU WIN " << endl;
+					for (int i = 0; i < lines; i++)
+						for (int j = 0; j < columns; j++)
+							if (grid[i][j] == -1)
+								clicked[i][j] = 2;
+				}
+			if (gameResult != -1) {
+				afisare(grid, clicked, lines, columns);
+				click(mouseY, mouseX, mouseType);
+				while (mouseType != 1 || mouseY != lines + 3 || mouseX < 1 || mouseX>29)
+					click(mouseY, mouseX, mouseType);
+			}
+			system("cls");
 		}
 			break;
 		case 2: {
 			system("cls");
 			howtoplayMenu();
+			click(mouseX, mouseY, mouseType);
+			while (mouseY != 11 || mouseX < 2 || mouseX>29 || mouseType == 2)
+				click(mouseX, mouseY, mouseType);
+			system("cls");
 		}
 			break;
 		case 3: {
+			system("cls");
 			exitGame = true;
 		}
 			break;
 		}
-		exitGame = true;
 	}
 	return 0;
 }
