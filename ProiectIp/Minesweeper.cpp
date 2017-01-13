@@ -246,21 +246,23 @@ int gameStart(int height, int width) {
 		click(clickY, clickX, clickType);
 		clickX--;
 		clickY--;
+		while (clickX > height + 2 || clickY > 29)
+			click(clickY, clickX, clickType);
 		if (clickType == 2)
 			if (clickX >= 0 && clickX < height&&clickY >= 0 && clickY < width)
 				if (clicked[clickX][clickY] == 2)
 					clicked[clickX][clickY] = 0;
-				else	
+				else
 					clicked[clickX][clickY] = 2;
 			else;
 		else
-			if (clickX >= -1 && clickX < height&&clickY >= -1 && clickY < width)
+			if (clickX >= 0 && clickX < height&&clickY >= 0 && clickY < width)
 				if (grid[clickX][clickY] == -1 && clicked[clickX][clickY] == 0)
 					return 0;
 				else
 					modify(clickX, clickY, height, width);
 			else
-				if (clickX > 0 && clickX < 28 && clickY == height + 2) 
+				if (clickY + 1 > 0 && clickY + 1 <= 28 && clickX + 1 == height + 2)
 					return -1;
 	}
 	return 1;
