@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <Windows.h>
+#include <climits>
 using namespace std;
 int grid[55][55], clicked[55][55], lines, columns, bombs;
 
@@ -385,7 +386,7 @@ int gameStart(int height, int width) {
 		while (clickX > height + 2 || clickY > 29)
 			click(clickY, clickX, clickType);
 		if (clickType == 2)
-			if (clickX >= 0 && clickX < height&&clickY >= 0 && clickY < width)
+			if (clickX >= 0 && clickX < height&&clickY >= 0 && clickY < width && clicked[clickX][clickY]==0)
 				if (clicked[clickX][clickY] == 2)
 					clicked[clickX][clickY] = 0;
 				else
@@ -402,7 +403,7 @@ int gameStart(int height, int width) {
 				else
 					modify(clickX, clickY, height, width);
 			else
-				if (clickY + 1 > 0 && clickY + 1 <= 28 && clickX + 1 == height + 2)
+				if (clickY + 1 > 0 && clickY + 1 <= 28 && clickX + 1 == height + 2 && clicked[clickX][clickY] != 2)
 					return -1;
 		}
 	}
@@ -472,19 +473,39 @@ int main() {
 				system("cls");
 				cout << "LINES(min 2; max 50):";
 				cin >> lines;
-
+				while (cin.fail()) {
+					cin.clear();
+					cin.ignore(INT_MAX, '\n');
+					cout << endl << "You can only enter numbers!" << endl;
+					cout << "LINES(min 2; max 50):";
+					cin >> lines;
+				}
 				if (lines > 50)
 					lines = 50;
 				if (lines < 2)
 					lines = 2;
-				cout << "COLUMNS(min 2; max 50):";
+				cout << endl << "COLUMNS(min 2; max 50):";
 				cin >> columns;
+				while (cin.fail()) {
+					cin.clear();
+					cin.ignore(INT_MAX, '\n');
+					cout << endl << "You can only enter numbers!" << endl;
+					cout << "COLUMNS(min 2; max 50):";
+					cin >> columns;
+				}
 				if (columns > 50)
 					columns = 50;
 				if (columns < 2)
 					columns = 2;
-				cout << "BOMBS(min 1; max " << (lines*columns) - 1 << "):";
+				cout << endl << "BOMBS(min 1; max " << (lines*columns) - 1 << "):";
 				cin >> bombs;
+				while (cin.fail()) {
+					cin.clear();
+					cin.ignore(INT_MAX, '\n');
+					cout << endl << "You can only enter numbers!" << endl;
+					cout << "BOMBS(min 1; max " << (lines*columns) - 1 << "):";
+					cin >> bombs;
+				}
 				if (bombs > lines*columns - 1)
 					bombs = lines*columns - 1;
 				if (bombs < 1)
