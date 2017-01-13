@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <climits>
 using namespace std;
-int grid[55][55], clicked[55][55], lines, columns, bombs;
+int grid[55][55], clicked[55][55], lines, columns, bombs, flags;
 
 void matrixGeneration(int grid[55][55], int height, int width, int bombs) {
 	int bomsOnMap = 0;
@@ -75,6 +75,7 @@ void afisare(int grid[55][55],int clicked[55][55], int height, int width)
 									cout << grid[i][j];
 		cout << endl;
 	}
+	cout << " Flaguri ramase: " << bombs - flags << endl;
 	cout << " CLICK HERE TO RETURN TO MENU " << endl;
 }
 
@@ -109,7 +110,6 @@ void click(short &x, short &y, int &type){
 	HANDLE hin = GetStdHandle(STD_INPUT_HANDLE);
 	INPUT_RECORD inputRecord;
 	DWORD Events;
-	COORD coord;
 	CONSOLE_CURSOR_INFO cci;
 	cci.dwSize = 25;
 	cci.bVisible = FALSE;
@@ -267,85 +267,86 @@ void firstClick(short x, short y, int lines, int columns) {
 					i = lines;
 					j = columns;
 				}
-	if (grid[x - 1][y] == -1)
-		for (int i = 0; i < lines; i++)
-			for (int j = 0; j < columns; j++)
-				if (grid[i][j] != -1 && clicked[i][j] == 0) {
-					grid[x - 1][y] = 0;
-					grid[i][j] = -1;
-					i = lines;
-					j = columns;
-				}
-	if (grid[x - 1][y - 1] == -1)
-		for (int i = 0; i < lines; i++)
-			for (int j = 0; j < columns; j++)
-				if (grid[i][j] != -1 && clicked[i][j] == 0) {
-					grid[x][y] = 0;
-					grid[i][j] = -1;
-					clicked[i][j] = 0;
-					i = lines;
-					j = columns;
-				}
-	if (grid[x - 1][y + 1] == -1)
-		for (int i = 0; i < lines; i++)
-			for (int j = 0; j < columns; j++)
-				if (grid[i][j] != -1 && clicked[i][j] == 0) {
-					grid[x-1][y+1] = 0;
-					grid[i][j] = -1;
-					clicked[i][j] = 0;
-					i = lines;
-					j = columns;
-				}
-	if (grid[x][y - 1] == -1)
-		for (int i = 0; i < lines; i++)
-			for (int j = 0; j < columns; j++)
-				if (grid[i][j] != -1 && clicked[i][j] == 0) {
-					grid[x][y-1] = 0;
-					grid[i][j] = -1;
-					clicked[i][j] = 0;
-					i = lines;
-					j = columns;
-				}
-	if (grid[x][y + 1] == -1)
-		for (int i = 0; i < lines; i++)
-			for (int j = 0; j < columns; j++)
-				if (grid[i][j] != -1 && clicked[i][j] == 0) {
-					grid[x][y+1] = 0;
-					grid[i][j] = -1;
-					clicked[i][j] = 0;
-					i = lines;
-					j = columns;
-				}
-	if (grid[x + 1][y - 1] == -1)
-		for (int i = 0; i < lines; i++)
-			for (int j = 0; j < columns; j++)
-				if (grid[i][j] != -1 && clicked[i][j] == 0) {
-					grid[x+1][y-1] = 0;
-					grid[i][j] = -1;
-					clicked[i][j] = 0;
-					i = lines;
-					j = columns;
-				}
-	if (grid[x + 1][y] == -1)
-		for (int i = 0; i < lines; i++)
-			for (int j = 0; j < columns; j++)
-				if (grid[i][j] != -1 && clicked[i][j] == 0) {
-					grid[x+1][y] = 0;
-					grid[i][j] = -1;
-					clicked[i][j] = 0;
-					i = lines;
-					j = columns;
-				}
-	if (grid[x + 1][y + 1] == -1)
-		for (int i = 0; i < lines; i++)
-			for (int j = 0; j < columns; j++)
-				if (grid[i][j] != -1 && clicked[i][j] == 0) {
-					grid[x+1][y+1] = 0;
-					grid[i][j] = -1;
-					clicked[i][j] = 0;
-					i = lines;
-					j = columns;
-				}
+	if (x > 0)
+		if (grid[x - 1][y] == -1)
+			for (int i = 0; i < lines; i++)
+				for (int j = 0; j < columns; j++)
+					if (grid[i][j] != -1 && clicked[i][j] == 0) {
+						grid[x - 1][y] = 0;
+						grid[i][j] = -1;
+						i = lines;
+						j = columns;
+					}
+	if (x > 0 && y < columns)
+		if (grid[x - 1][y + 1] == -1)
+			for (int i = 0; i < lines; i++)
+				for (int j = 0; j < columns; j++)
+					if (grid[i][j] != -1 && clicked[i][j] == 0) {
+						grid[x - 1][y + 1] = 0;
+						grid[i][j] = -1;
+						i = lines;
+						j = columns;
+					}
+	if (x > 0 && y > 0)
+		if (grid[x - 1][y - 1] == -1)
+			for (int i = 0; i < lines; i++)
+				for (int j = 0; j < columns; j++)
+					if (grid[i][j] != -1 && clicked[i][j] == 0) {
+						grid[x][y] = 0;
+						grid[i][j] = -1;
+						i = lines;
+						j = columns;
+					}
+	if (y > 0)
+		if (grid[x][y - 1] == -1)
+			for (int i = 0; i < lines; i++)
+				for (int j = 0; j < columns; j++)
+					if (grid[i][j] != -1 && clicked[i][j] == 0) {
+						grid[x][y - 1] = 0;
+						grid[i][j] = -1;
+						i = lines;
+						j = columns;
+					}
+	if (y < columns)
+		if (grid[x][y + 1] == -1)
+			for (int i = 0; i < lines; i++)
+				for (int j = 0; j < columns; j++)
+					if (grid[i][j] != -1 && clicked[i][j] == 0) {
+						grid[x][y + 1] = 0;
+						grid[i][j] = -1;
+						i = lines;
+						j = columns;
+					}
+	if (x < lines&&y>0)
+		if (grid[x + 1][y - 1] == -1)
+			for (int i = 0; i < lines; i++)
+				for (int j = 0; j < columns; j++)
+					if (grid[i][j] != -1 && clicked[i][j] == 0) {
+						grid[x + 1][y - 1] = 0;
+						grid[i][j] = -1;
+						i = lines;
+						j = columns;
+					}
+	if (x < lines)
+		if (grid[x + 1][y] == -1)
+			for (int i = 0; i < lines; i++)
+				for (int j = 0; j < columns; j++)
+					if (grid[i][j] != -1 && clicked[i][j] == 0) {
+						grid[x + 1][y] = 0;
+						grid[i][j] = -1;
+						i = lines;
+						j = columns;
+					}
+	if (x < lines&&y < columns)
+		if (grid[x + 1][y + 1] == -1)
+			for (int i = 0; i < lines; i++)
+				for (int j = 0; j < columns; j++)
+					if (grid[i][j] != -1 && clicked[i][j] == 0) {
+						grid[x + 1][y + 1] = 0;
+						grid[i][j] = -1;
+						i = lines;
+						j = columns;
+					}
 	for (int i = 0; i < lines; i++)
 		for (int j = 0; j < columns; j++)
 			if (grid[i][j] != -1)
@@ -376,6 +377,7 @@ void firstClick(short x, short y, int lines, int columns) {
 int gameStart(int height, int width) {
 	short clickX, clickY;
 	int clickType;
+	flags = 0;
 	bool firstChoice = false;
 	while (!verify(height, width)) {
 		system("cls");
@@ -386,14 +388,20 @@ int gameStart(int height, int width) {
 		while (clickX > height + 2 || clickY > 29)
 			click(clickY, clickX, clickType);
 		if (clickType == 2)
-			if (clickX >= 0 && clickX < height&&clickY >= 0 && clickY < width && clicked[clickX][clickY]==0)
-				if (clicked[clickX][clickY] == 2)
+			if (clickX >= 0 && clickX < height&&clickY >= 0 && clickY < width)
+				if (clicked[clickX][clickY] == 2) {
 					clicked[clickX][clickY] = 0;
-				else
-					clicked[clickX][clickY] = 2;
+					flags--;
+				}
+				else 
+					if (flags < bombs && clicked[clickX][clickY] != 1) {
+						clicked[clickX][clickY] = 2;
+						flags++;
+					}
+					else;
 			else;
 		else {
-			if (!firstChoice) {
+			if (!firstChoice && clicked[clickX][clickY] != 2) {
 				firstClick(clickX, clickY, height, width);
 				firstChoice = true;
 			}
@@ -403,7 +411,7 @@ int gameStart(int height, int width) {
 				else
 					modify(clickX, clickY, height, width);
 			else
-				if (clickY + 1 > 0 && clickY + 1 <= 28 && clickX + 1 == height + 2 && clicked[clickX][clickY] != 2)
+				if (clickY + 1 > 0 && clickY + 1 <= 28 && clickX + 1 == height + 3 && clicked[clickX][clickY] != 2)
 					return -1;
 		}
 	}
@@ -536,7 +544,7 @@ int main() {
 			if (gameResult != -1) {
 				afisare(grid, clicked, lines, columns);
 				click(mouseY, mouseX, mouseType);
-				while (mouseType != 1 || mouseX != lines + 3 || mouseY < 1 || mouseY>29)
+				while (mouseType != 1 || mouseX != lines + 4 || mouseY < 1 || mouseY>29)
 					click(mouseY, mouseX, mouseType);
 			}
 			system("cls");
