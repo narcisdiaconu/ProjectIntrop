@@ -257,7 +257,8 @@ int verify(int height, int width) {
 void firstClick(short x, short y, int lines, int columns) {
 	for (int i = x - 1; i <= x + 1; i++)
 		for (int j = y - 1; j <= y + 1; j++)
-			clicked[i][j] = 1;
+			if (i >= 0 && j >= 0)
+				clicked[i][j] = 1;
 	if (grid[x][y] == -1)
 		for (int i = 0; i < lines; i++)
 			for (int j = 0; j < columns; j++)
@@ -292,7 +293,7 @@ void firstClick(short x, short y, int lines, int columns) {
 			for (int i = 0; i < lines; i++)
 				for (int j = 0; j < columns; j++)
 					if (grid[i][j] != -1 && clicked[i][j] == 0) {
-						grid[x][y] = 0;
+						grid[x-1][y-1] = 0;
 						grid[i][j] = -1;
 						i = lines;
 						j = columns;
